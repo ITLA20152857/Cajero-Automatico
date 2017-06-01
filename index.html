@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Cajero Automatico</title>
+	<style>
+		#pantalla{
+			text-align: center;
+			border: solid 2px black;
+			width: 50%;
+			height: 250px;
+			margin-left: 335px;
+		}
+
+		.grupoDeBotones{
+			text-align: center;
+		}
+
+		.grupoDeBotones .boton{
+			padding: 15px 32px;
+			margin: 3px 2px;
+			font-size: 16px;
+
+			text-align: center;
+			line-height: 2%;
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+		}
+
+		#botonLimpiar, #botonCancelar, #botonAceptar, #botonVacioDerecho{
+			margin: 3px 20px;
+			width: 9%;
+			
+		}
+		
+		hr{
+			width: 50%;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="pantalla">
+		<h2>Bienvenido a su cajero virtual</h2>
+		<h4>Escoja una opcion:</h4>
+		<select name="opciones" id="opciones" onchange="mostrarSelecion();" >
+			<option style="display:none;">Seleccione</option>
+			<option value="depositar">Depositar</option>
+			<option value="retirar">Retirar</option>
+			<option value="consultar">Consultar</option>
+		</select>
+		<br>
+		<p id="textoVariable"></p>
+		<div id="txtValor"></div>
+
+	</div>
+
+	<hr>
+
+	<div class="grupoDeBotones">
+		<button onclick="numeros('1');" type="button" id="boton1" class="boton">1</button>
+		<button onclick="numeros('2');" type="button" id="boton2" class="boton">2</button>
+		<button onclick="numeros('3');" type="button" id="boton3" class="boton">3</button>
+		<button onclick="limpiar();" type="button" id="botonLimpiar" class="boton"> limpiar </button>
+		<br>
+		<button onclick="numeros('4');" type="button" id="boton4" class="boton">4</button>
+		<button onclick="numeros('5');" type="button" id="boton5" class="boton">5</button>
+		<button onclick="numeros('6');" type="button" id="boton6" class="boton">6</button>
+		<button onclick="cancelar();" type="button" id="botonCancelar" class="boton">cancelar</button>
+		<br>
+		<button onclick="numeros('7');" type="button" id="boton7" class="boton">7</button>
+		<button onclick="numeros('8');" type="button" id="boton8" class="boton">8</button>
+		<button onclick="numeros('9');" type="button" id="boton9" class="boton">9</button>
+		<button onclick="aceptar();" type="button" id="botonAceptar" class="boton">aceptar</button>
+		<br>
+		<button type="button" id="botonVacioIzquierdo" class="boton">""</button>
+		<button onclick="numeros('0');" type="button" id="boton0" class="boton">0</button>
+		<button type="button" id="botonVacioMedio" class="boton">""</button>
+		<button type="button" id="botonVacioDerecho" class="boton">""</button>
+	</div>
+
+
+	<script>
+
+ 		var existeInput = false;
+ 		var existeLabel = false;
+
+		var saldo = 0.0;
+
+		function mostrarSelecion(){
+		/* Para obtener el valor */
+		var opcion = document.getElementById("opciones").value;		
+ 
+		/* Para obtener el texto 
+		var combo = document.getElementById("opciones");
+		var selected = combo.options[combo.selectedIndex].text;
+		console.log(selected);*/
+
+			switch(opcion){
+				
+				case 'depositar':
+					digite = "Ingrese la cantidad a depositar:";
+					document.getElementById('textoVariable').innerHTML = digite;
+
+					if (existeLabel) {
+						removeObject('balance');
+					}
+
+					crearTextInput();
+					break;
+
+				case 'retirar':
+					digite = "Ingrese la cantidad a retirar:";
+					document.getElementById('textoVariable').innerHTML = digite;
+
+					if (existeLabel) {
+						removeObject('balance');
+					}
+
+					crearTextInput();
+					break;
+
+				case 'consultar':
+					balanceDisponible = "Su saldo disponible es:";
+					document.getElementById('textoVariable').innerHTML = balanceDisponible;
+
+					if (existeInput) {
+						removeObject('valor');
+					}
+
+					crearLabel();
+					break;
+			}
+		
+		}
+
+		function crearTextInput(){	
+
+			if (!existeInput) {
+
+				input = document.createElement("INPUT");
+				input.setAttribute("type", "text");
+				input.setAttribute("id", "valor");
+				document.getElementById('txtValor').appendChild(input);
+
+				existeInput = true;
+
+			}
+		}
+		function crearLabel(){
+			
+			if (!existeLabel) {
+
+				balance = document.createElement('p');
+				balance.setAttribute("id", "balance");
+				document.getElementById('txtValor').appendChild(balance);
+				document.getElementById('balance').innerHTML = saldo;
+
+				existeLabel = true;
+			}
+		}
+
+		function removeObject(id){	
+			
+			if (id == "valor") {
+				existeInput = false;
+			}else{
+				existeLabel = false;
+			}
+
+			borrar = document.getElementById(id);
+			borrar.parentNode.removeChild(borrar);
+		}
+
+		function aceptar() {
+			
+			var opcion = document.getElementById("opciones").value;
+			var valor = document.getElementById("valor").value;
+
+			switch(opcion){
+
+				case 'depositar':
+					saldo += parseFloat(valor);
+					break;
+
+				case 'retirar':
+					saldo -= valor;
+					break;
+			}
+		}
+
+		function numeros(numero){
+			document.getElementById('valor').value += numero;
+		}
+
+		function cancelar(){
+			mostrarSelecion();
+		}
+
+		function limpiar(){
+			document.getElementById('valor').value = "";
+		}
+
+	</script>
+</body>
+</html>
